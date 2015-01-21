@@ -1,0 +1,34 @@
+// Example 02: Turn on LED while the button is pressed
+
+const int LED = 9;   // the pin for the LED
+const int BUTTON = 7; // the pin for the BUTTON
+int val = 0; // val is the state of the input pin
+int old_val = 0; // the previous value
+int state = 0; // tells arduino 0 = off and 1 = on
+ 
+void setup() 
+{
+  pinMode(LED, OUTPUT); // LED is the output
+  pinMode(BUTTON, INPUT); // BUTTON is input
+}
+void loop()
+{
+  val = digitalRead(BUTTON); // read button value and store it
+  
+  if ((val == HIGH) && (old_val == LOW))
+  {
+    state = 1 - state; // changes state of button from on to off or v.v.
+    delay(30); // 30 millisecond delay since last time button pressed.
+  }
+  
+  old_val = val;    //stores old value
+  
+  if (state == 1){
+    digitalWrite(LED, HIGH); // Writes ON to the LED
+  }
+  else 
+  {
+    digitalWrite(LED, LOW);    // Writes off to the LED
+  }
+}
+  

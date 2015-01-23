@@ -1,0 +1,43 @@
+int ledPins[] = {
+  2,3,4,5,6,7,8,9,10,11,12 };       // this is the array of the pin numbers that LEDs are connected to
+int pinCount = 11;                  // number of LEDs I have hooked up. If less, change this and line 2
+int timer = 10;                     // 10ms delay when going from on to off & vv
+
+void setup() {
+  for (int thisPin = 0; thisPin < pinCount; thisPin++) {
+    pinMode(ledPins[thisPin], OUTPUT);    //for-loop that sets up all of the LEDs in an array
+  }                                       // starting from 2 - 12
+
+}
+
+void loop() {
+  for(int thisPin = 0; thisPin < pinCount; thisPin++) {         //goes from 1-12, turning them on and off each after the other
+    timer = analogRead(A0) / 2;                                 //speed depends on A0 potentiometer % 2 and get delay
+    digitalWrite(ledPins[thisPin], HIGH);                       //tells current pin to turn on
+    digitalWrite(ledPins[thisPin] +1, HIGH);                    //tells next pin to turn on
+    digitalWrite(ledPins[thisPin] + 2, HIGH);                   //and again...
+    delay(timer);
+    timer = analogRead(A0) / 2;                                 //read the potentiometer value to get delay
+    digitalWrite(ledPins[thisPin], LOW);                        //opposite of first part, this turns off leds
+    digitalWrite(ledPins[thisPin] + 1, LOW);
+    digitalWrite(ledPins[thisPin] + 2, LOW);
+    timer = analogRead(A0) / 2;
+
+  }
+
+  for (int thisPin = pinCount - 1; thisPin >= 0; thisPin--) {   //same as above but starting at 12 and
+    timer = analogRead(A0) / 2;                                 //working backwards from 12 to 1
+    digitalWrite(ledPins[thisPin], HIGH);
+    digitalWrite(ledPins[thisPin] - 1, HIGH);
+    digitalWrite(ledPins[thisPin] - 2, HIGH);
+    delay(timer);
+    timer = analogRead(A0) / 2;
+    digitalWrite(ledPins[thisPin], LOW);
+    digitalWrite(ledPins[thisPin] - 1 , LOW);
+    digitalWrite(ledPins[thisPin] - 2, LOW);
+    timer = analogRead(A0) / 2;
+  
+  
+
+  }
+}

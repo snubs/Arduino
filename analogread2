@@ -1,0 +1,15 @@
+const int LED = 9;    //sets led to pin 9
+
+int val = 0;          //sets value of sensor
+
+void setup()
+{
+  pinMode(LED, OUTPUT);  //sets led as output
+}
+
+void loop() 
+{
+  val = analogRead(0);    //reads sensor value
+  analogWrite(LED, val/4);  //turns led on to match brightness of sensor
+  delay(50);              //delays program for 50 ms
+}

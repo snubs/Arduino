@@ -1,0 +1,17 @@
+const int LED = 9; //sets led to pin 9
+
+int val = 0;       //sets value coming from the sensor
+
+void setup()
+{
+  pinMode(LED, OUTPUT);  //sets led as an output
+}
+
+void loop() 
+{
+  val = analogRead(0);   //reading sensor value
+  digitalWrite(LED, HIGH);  //turns led on
+  delay(val);            //stops program
+  digitalWrite(LED, LOW);    //turns led off
+  delay(val);            //stops program again
+}

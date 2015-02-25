@@ -1,0 +1,24 @@
+void setup()                    // setup
+{
+  Serial.begin(9600);           // set up Serial library at 9600 bps
+  
+  Serial.println("____    ____         ___                     ________ __________ ____              ___ ");  // prints hello with ending line break 
+  Serial.println("`MM'    `MM'         `MM                     `MMMMMMM MMMMMMMMMM `Mb(      db      )d' ");
+  Serial.println(" MM      MM           MM                      MM          MM      YM.     ,PM.     ,P  ");
+  Serial.println(" MM      MM    ___    MM   __  _______        MM          MM      `Mb     d'Mb     d'  ");
+  Serial.println(" MM      MM  6MMMMb   MM   d' ,MMMMMMM        MM   ,      MM       YM.   ,P YM.   ,P   ");
+  Serial.println(" MMMMMMMMMM 8M'  `Mb  MM  d'  dM              MMMMMM      MM       `Mb   d' `Mb   d'   ");
+  Serial.println(" MM      MM     ,oMM  MM d'   MP              MM   `      MM        YM. ,P   YM. ,P    ");
+  Serial.println(" MM      MM ,6MM9'MM  MMdM.   M'              MM          MM        `Mb d'   `Mb d'    ");
+  Serial.println(" MM      MM MM'   MM  MMPYM.  MMMMMMb         MM          MM         YM,P     YM,P     ");
+  Serial.println(" MM      MM MM.  ,MM  MM  YM.      `Mb        MM          MM         `MM'     `MM'     ");
+  Serial.println("_MM_    _MM_`YMMM9'Yb_MM_  YM._     MM       _MM_        _MM_         YP       YP      ");
+  Serial.println("                                    MM                                                 ");
+  Serial.println("                              MM.  ,M9                                                 ");
+  Serial.println("                               YMMMM9  ");
+}
+
+void loop()                       // run over and over again
+{
+                                  // do nothing!
+}

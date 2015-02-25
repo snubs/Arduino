@@ -1,0 +1,32 @@
+// include the library code from sketch menu:
+#include <LiquidCrystal.h>
+
+// initialize the library w interface pins
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+//create custom character
+byte heart[8] = {
+        B00000,
+        B01010,
+        B11111,
+        B11111,
+        B01110,
+        B00100,
+        B00000,
+        B00000
+};
+
+void setup() {
+  // columns and rows 
+  lcd.begin(16, 2);
+  // Print a message to the LCD.
+  lcd.print("Hak5 FTW!");
+  //print the heart
+  lcd.createChar(1, heart);
+  lcd.setCursor(0, 1);
+  lcd.write(1);
+}
+
+void loop() 
+{  
+}

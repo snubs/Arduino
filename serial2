@@ -1,0 +1,10 @@
+void setup()                    // setup
+{
+  Serial.begin(9600);           // set up Serial library at 9600 bps
+}
+
+void loop()                       // run over and over again
+{
+  Serial.println("Hello world!");  // prints hello world! w line break
+  delay(1000);                     // delay for one second between breaks and loops
+}

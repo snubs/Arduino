@@ -1,0 +1,11 @@
+void setup()                    // sets up the code
+{
+  Serial.begin(9600);           // set up Serial library at 9600 bps
+  
+  Serial.println("Hello world!");  // hello world! w a line break
+}
+
+void loop()                       // empty loop
+{
+                                  // tells arduino that's all we wanted to do
+}

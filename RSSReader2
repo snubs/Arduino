@@ -1,0 +1,159 @@
+// the second part!
+import java.net.*; //these libraries let you see info on your monitor
+import java.util.*;
+import java.io.*;
+import processing.serial.*;
+
+String feed = "http://hak5.org/feed"; //the rss we will read from
+
+int interval = 10; // retrieve feed every 1 minute;
+int lastTime;      // the last time we fetched the content
+
+int hak    = 0; //our three words
+int drone   = 0;
+int arduino = 0;
+
+int light = 0; // light level measured by the ldr
+
+Serial port; //the info we want from teh arduino
+color c;
+String cs;
+
+String buffer = ""; // Accumulates characters coming from Arduino
+
+PFont font;
+
+void setup() { //this section creates an info box for us in english
+  size(640, 480);
+  frameRate(10); // 1 minute for updates
+
+  font = loadFont("HelveticaNeueLTPro-Roman-32.vlw");
+  fill(255);
+  textFont(font, 32);
+
+  String arduinoPort = Serial.list()[0];
+
+  port = new Serial(this, arduinoPort, 9600); // connect to Arduino
+  lastTime = 0;
+  fetchData();
+}
+
+void draw() {
+  background( c );
+  int n = (interval - ((millis()-lastTime)/1000));
+
+  // Build a colour based on the 3 values
+  c = color(hak, drone, arduino);
+  cs = "#" + hex(c, 6); // Prepare a string to be sent to Arduino
+
+  text("Arduino Networked Lamp", 10, 40);
+  text("Reading feed:", 10, 100);
+  text(feed, 10, 140);
+
+  text("Next update in "+ n + " seconds", 10, 450);
+  text("hak", 10, 200);
+  text(" " + hak, 130, 200);
+  rect(200, 172, hak, 28);
+
+  text("drone ", 10, 240);
+  text(" " + drone, 130, 240);
+  rect(200, 212, drone, 28);
+
+  text("arduino ", 10, 280);
+  text(" " + arduino, 130, 280);
+  rect(200, 252, arduino, 28);
+
+  // write the colour string to the screen
+  text("sending", 10, 340);
+  text(cs, 200, 340);
+  text("light level", 10, 380); //reads the ldr
+  rect(200, 352, light/10.23, 28); // this turns 1023 into 100
+
+  if (n <= 0) { //keep fetching data
+    fetchData();
+    lastTime = millis();
+  }
+
+  port.write(cs); // send data to Arduino
+
+  if (port.available() > 0) { // check if there is data waiting to be sent
+    int inByte = port.read(); // read one byte
+    if (inByte != 10) { // if byte is not newline
+      buffer = buffer + char(inByte); // just add it to the buffer
+    }
+    else {
+
+      // newline reached, let's process the data
+      if (buffer.length() > 1) { // make sure there is enough data
+
+        // chop off the last character, it's a carriage return
+        // (a carriage return is the character at the end of a
+        // line of text)
+        buffer = buffer.substring(0, buffer.length() -1);
+
+        // turn the buffer from string into an integer number so take a word and turn it into numbers
+        light = int(buffer);
+
+        // clean the buffer for the next read cycle, refreshes
+        buffer = "";
+
+        // clears any extra waiting data
+        port.clear();
+      }
+    }
+  }
+}
+
+void fetchData() {
+
+  // we use these strings to parse the feed
+  String data;
+  String chunk;
+
+  // zero the counters
+  hak = 0;
+  drone = 0;
+  arduino = 0;
+  try {
+    URL url = new URL(feed); // An object to represent the URL
+
+    // prepare a connection
+    URLConnection conn = url.openConnection();
+    conn.connect(); // now connect to the Website
+
+    // this reads the data from the url one line at a time
+    BufferedReader in = new
+      BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+    // read each line from the feed
+    while ( (data = in.readLine ()) != null) {
+
+      StringTokenizer st =
+        new StringTokenizer(data, "\"<>,.()[] ");// break it down
+
+      while (st.hasMoreTokens ()) {
+        // each chunk of data is made lowercase
+        chunk= st.nextToken().toLowerCase() ;
+
+        if (chunk.indexOf("hak") >= 0 ) // found "hak"?
+          hak++; // increment love by 1
+        if (chunk.indexOf("drone") >= 0) // found "drone"?
+          drone++; // increment peace by 1
+        if (chunk.indexOf("arduino") >= 0) // found "arduino"?
+          arduino++; // increment arduino by 1
+      }
+    }
+    // Set 64 to be the maximum number of references we care about.
+    if (hak > 64) hak = 64;
+    if (drone > 64) drone = 64;
+    if (arduino > 64) arduino = 64;
+
+    hak = hak * 4;     // multiply by 4 so that the max is 255,
+    drone = drone * 4;       // which comes in handy when building a
+    arduino = arduino * 4; // colour that is made of 4 bytes (ARGB)
+  }
+  catch (Exception ex) { // If there was an error, stop the sketch
+    ex.printStackTrace();
+    System.out.println("ERROR: "+ex.getMessage());
+  }
+}
